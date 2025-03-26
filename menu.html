@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Menú de Navegación</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      font-family: Arial, sans-serif;
+    }
+
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #2c3e50;
+      color: white;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .sidebar input[type="text"] {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+    }
+
+    .sidebar a:hover {
+      background-color: #1abc9c;
+    }
+
+    .content {
+      margin-left: 270px;
+      padding: 40px;
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>📂 Sistema PDF</h2>
+    <input type="text" id="searchBar" placeholder="Buscar documento..." onkeypress="buscar(event)">
+    <a href="login.html">🔐 Login</a>
+    <a href="usuarios.html">👤 Gestión de Usuarios</a>
+    <a href="carga-archivos.html">📤 Carga de Archivos</a>
+    <a href="organizacion.html">📁 Organización</a>
+    <a href="analisis.html">🤖 Análisis Inteligente</a>
+    <a href="auditoria.html">📜 Auditoría</a>
+    <a href="reportes.html">📊 Reportes</a>
+    <a href="admin-sistema.html">⚙️ Administración</a>
+    <a href="busqueda.html">🔎 Búsqueda Avanzada</a>
+  </div>
+
+  <div class="content">
+    <h1>Bienvenido al Sistema de Gestión de Archivos PDF</h1>
+    <p>Selecciona una opción del menú o usa la barra de búsqueda para encontrar documentos rápidamente.</p>
+  </div>
+
+  <script>
+    function buscar(e) {
+      if (e.key === "Enter") {
+        const termino = document.getElementById("searchBar").value;
+        if (termino.trim() !== "") {
+          window.location.href = `busqueda.html?query=${encodeURIComponent(termino)}`;
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

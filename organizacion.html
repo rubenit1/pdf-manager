@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Organización de Carpetas y Filtros</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ecf0f1;
+      padding: 50px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #2c3e50;
+      text-align: center;
+    }
+
+    .btn {
+      padding: 10px 15px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px 0;
+    }
+
+    .btn:hover {
+      background-color: #2980b9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #bdc3c7;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📁 Organización de Carpetas</h2>
+
+    <label for="nuevaCarpeta">Crear nueva carpeta:</label>
+    <input type="text" id="nuevaCarpeta" placeholder="Ej. Clientes 2025">
+    <button class="btn" onclick="crearCarpeta()">➕ Crear Carpeta</button>
+
+    <h3 style="margin-top: 30px;">📂 Carpetas Actuales</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaCarpetas">
+        <tr>
+          <td>Proyectos</td>
+          <td>
+            <button class="btn" onclick="renombrarCarpeta(this, 'Proyectos')">✏️ Renombrar</button>
+            <button class="btn" onclick="eliminarCarpeta(this)">🗑️ Eliminar</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Legales</td>
+          <td>
+            <button class="btn" onclick="renombrarCarpeta(this, 'Legales')">✏️ Renombrar</button>
+            <button class="btn" onclick="eliminarCarpeta(this)">🗑️ Eliminar</button>
+          </td>
+        </tr>
+        <tr>
+          <td>General</td>
+          <td>
+            <button class="btn" onclick="renombrarCarpeta(this, 'General')">✏️ Renombrar</button>
+            <button class="btn" onclick="eliminarCarpeta(this)">🗑️ Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function crearCarpeta() {
+      const nombre = document.getElementById('nuevaCarpeta').value.trim();
+      if (!nombre) return alert("Ingresa un nombre para la carpeta.");
+
+      const tbody = document.getElementById('tablaCarpetas');
+      const fila = document.createElement('tr');
+      fila.innerHTML = `
+        <td>${nombre}</td>
+        <td>
+          <button class="btn" onclick="renombrarCarpeta(this, '${nombre}')">✏️ Renombrar</button>
+          <button class="btn" onclick="eliminarCarpeta(this)">🗑️ Eliminar</button>
+        </td>
+      `;
+      tbody.appendChild(fila);
+      document.getElementById('nuevaCarpeta').value = '';
+    }
+
+    function eliminarCarpeta(btn) {
+      if (confirm("¿Estás seguro de que deseas eliminar esta carpeta?")) {
+        const fila = btn.closest('tr');
+        fila.remove();
+      }
+    }
+
+    function renombrarCarpeta(btn, actual) {
+      const nuevo = prompt("Nuevo nombre para la carpeta:", actual);
+      if (nuevo) {
+        const fila = btn.closest('tr');
+        fila.querySelector('td').innerText = nuevo;
+      }
+    }
+  </script>
+</body>
+</html>

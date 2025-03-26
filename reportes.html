@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reportes y Estadísticas</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ecf0f1;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    canvas {
+      margin-top: 30px;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📊 Reportes y Estadísticas del Sistema</h2>
+
+    <canvas id="graficoArchivos"></canvas>
+    <canvas id="graficoEspacio"></canvas>
+
+    <button class="btn" onclick="generarPDF()">📥 Exportar Reporte</button>
+  </div>
+
+  <script>
+    const ctx1 = document.getElementById('graficoArchivos');
+    const ctx2 = document.getElementById('graficoEspacio');
+
+    new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: ['Juan', 'María', 'Admin', 'Legal'],
+        datasets: [{
+          label: 'Archivos Subidos por Usuario',
+          data: [12, 9, 15, 6],
+          backgroundColor: '#3498db'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        labels: ['Proyectos', 'Legales', 'General'],
+        datasets: [{
+          label: 'Uso de espacio por carpeta',
+          data: [45, 30, 25],
+          backgroundColor: ['#2ecc71', '#e67e22', '#9b59b6']
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+    function generarPDF() {
+      alert("Este botón podría exportar un reporte PDF con las gráficas.");
+    }
+  </script>
+</body>
+</html>

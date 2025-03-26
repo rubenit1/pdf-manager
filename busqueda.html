@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Búsqueda de Documentos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ecf0f1;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    .filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .filtros input,
+    .filtros select {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #bdc3c7;
+      border-radius: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
+
+    .folder-section {
+      margin-top: 30px;
+    }
+
+    .folder {
+      margin-bottom: 10px;
+    }
+
+    .folder-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .file-item {
+      margin-left: 20px;
+    }
+
+    .acciones span {
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .acciones span:hover {
+      color: #3498db;
+    }
+
+    .accion-info {
+      background: #eef6fa;
+      padding: 10px;
+      margin-top: 10px;
+      border-left: 4px solid #3498db;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🔎 Búsqueda de Documentos</h2>
+
+    <div class="filtros">
+      <input type="text" id="buscarNombre" placeholder="Buscar por nombre...">
+      <input type="text" id="buscarEtiqueta" placeholder="Etiqueta...">
+      <select id="buscarCarpeta">
+        <option value="">Todas las carpetas</option>
+        <option value="Proyectos">Proyectos</option>
+        <option value="Legales">Legales</option>
+        <option value="General">General</option>
+      </select>
+      <input type="date" id="buscarFecha">
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Carpeta</th>
+          <th>Etiquetas</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaResultados">
+        <tr>
+          <td>Propuesta_ABC.pdf</td>
+          <td>Proyectos</td>
+          <td>cliente, oferta</td>
+          <td>2025-03-01</td>
+          <td class="acciones">
+            <span onclick="accion('Ver', 'Propuesta_ABC.pdf')">👁️</span>
+            <span onclick="accion('Descargar', 'Propuesta_ABC.pdf')">⬇️</span>
+            <span onclick="accion('Analizar', 'Propuesta_ABC.pdf')">🤖</span>
+            <span onclick="accion('Eliminar', 'Propuesta_ABC.pdf')">🗑️</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Contrato_XYZ.pdf</td>
+          <td>Legales</td>
+          <td>contrato, legal</td>
+          <td>2025-03-15</td>
+          <td class="acciones">
+            <span onclick="accion('Ver', 'Contrato_XYZ.pdf')">👁️</span>
+            <span onclick="accion('Descargar', 'Contrato_XYZ.pdf')">⬇️</span>
+            <span onclick="accion('Analizar', 'Contrato_XYZ.pdf')">🤖</span>
+            <span onclick="accion('Eliminar', 'Contrato_XYZ.pdf')">🗑️</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Manual_Usuario.pdf</td>
+          <td>General</td>
+          <td>manual, usuario</td>
+          <td>2025-03-10</td>
+          <td class="acciones">
+            <span onclick="accion('Ver', 'Manual_Usuario.pdf')">👁️</span>
+            <span onclick="accion('Descargar', 'Manual_Usuario.pdf')">⬇️</span>
+            <span onclick="accion('Analizar', 'Manual_Usuario.pdf')">🤖</span>
+            <span onclick="accion('Eliminar', 'Manual_Usuario.pdf')">🗑️</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="infoAccion" class="accion-info"></div>
+
+    <div class="folder-section">
+      <h3>📁 Navegación por Carpetas</h3>
+
+      <div class="folder">
+        <div class="folder-name">📁 Proyectos</div>
+        <div class="file-item">📄 Propuesta_ABC.pdf</div>
+      </div>
+
+      <div class="folder">
+        <div class="folder-name">📁 Legales</div>
+        <div class="file-item">📄 Contrato_XYZ.pdf</div>
+      </div>
+
+      <div class="folder">
+        <div class="folder-name">📁 General</div>
+        <div class="file-item">📄 Manual_Usuario.pdf</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const filtros = ['buscarNombre', 'buscarEtiqueta', 'buscarCarpeta', 'buscarFecha'];
+
+    filtros.forEach(id => {
+      document.getElementById(id).addEventListener('input', filtrarResultados);
+    });
+
+    function filtrarResultados() {
+      const nombre = document.getElementById('buscarNombre').value.toLowerCase();
+      const etiqueta = document.getElementById('buscarEtiqueta').value.toLowerCase();
+      const carpeta = document.getElementById('buscarCarpeta').value;
+      const fecha = document.getElementById('buscarFecha').value;
+
+      const filas = document.querySelectorAll('#tablaResultados tr');
+
+      filas.forEach(fila => {
+        const celdas = fila.querySelectorAll('td');
+        const matchNombre = nombre === '' || celdas[0].textContent.toLowerCase().includes(nombre);
+        const matchCarpeta = carpeta === '' || celdas[1].textContent === carpeta;
+        const matchEtiqueta = etiqueta === '' || celdas[2].textContent.toLowerCase().includes(etiqueta);
+        const matchFecha = fecha === '' || celdas[3].textContent === fecha;
+
+        fila.style.display = matchNombre && matchCarpeta && matchEtiqueta && matchFecha ? '' : 'none';
+      });
+    }
+
+    function accion(tipo, archivo) {
+      const info = document.getElementById("infoAccion");
+      info.style.display = 'block';
+      info.innerHTML = `🔔 Acción: <strong>${tipo}</strong> sobre <em>${archivo}</em>`;
+
+      setTimeout(() => {
+        info.style.display = 'none';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

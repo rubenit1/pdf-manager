@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulador de Análisis PDF con Robot</title>
+  <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ecf0f1;
+      padding: 30px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn:hover {
+      background-color: #2980b9;
+    }
+    #resultadoAnalisis {
+      margin-top: 20px;
+      background: #fff3cd;
+      padding: 15px;
+      border-left: 5px solid #ffc107;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🧠 Simulador de Análisis de Contrato</h2>
+    <p><strong>Archivo:</strong> contrato_ejemplo_robot_marcado.pdf</p>
+    <button class="btn" onclick="analizarPDF()">🤖 Analizar con Robot</button>
+
+    <canvas id="pdf-canvas"></canvas>
+
+    <div id="resultadoAnalisis"></div>
+  </div>
+
+  <script>
+    const url = "/mnt/data/contrato_ejemplo_robot_marcado.pdf"; // PDF generado
+
+    let pdfDoc = null,
+        pageNum = 1,
+        canvas = document.getElementById('pdf-canvas'),
+        ctx = canvas.getContext('2d');
+
+    pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+      pdfDoc = pdfDoc_;
+      renderPage(pageNum);
+    });
+
+    function renderPage(num) {
+      pdfDoc.getPage(num).then(function(page) {
+        const viewport = page.getViewport({ scale: 1.5 });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: ctx,
+          viewport: viewport
+        };
+        page.render(renderContext);
+      });
+    }
+
+    function analizarPDF() {
+      document.getElementById("resultadoAnalisis").innerHTML =
+        `<strong>Resultado del robot:</strong><br><br>
+        ⚠️ Se ha detectado una cláusula sospechosa en la <strong>página 1</strong>.<br><br>
+        <em>"El proveedor podrá cancelar el servicio sin previo aviso ni responsabilidad."</em>`;
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
