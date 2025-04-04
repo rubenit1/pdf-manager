@@ -24,11 +24,4 @@ jobs:
           action: "upload"
           app_location: "/"
           output_location: "/"
-          app_build_command: ""  # Disable the build (error resolved)
-
-      - name: Check for deployment token
-        if: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN == '' }}
-        run: echo "Skipping deployment as deployment token is missing."
-        continue-on-error: true
-        env:
-          skip_deploy_on_missing_secrets: true
+          app_build_command: ""  # Desactiva la construcción con Oryx
